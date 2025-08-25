@@ -1,0 +1,28 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto17
+  pre_build:
+    commands:
+      - echo "Cleaning and building Maven project..."
+      - mvn -B -DskipTests clean package
+  build:
+    commands:
+      - echo "Preparing dist payload..."
+      - rm -rf dist && mkdir -p dist
+      - cp target/myapp-0.0.1-SNAPSHOT.jar dist/app.jar
+      - cp appspec.yml dist/appspec.yml
+      - mkdir -p dist/scripts
+      - cp -r scripts/* dist/scripts/
+      - echo "Creating release zip..."
+      - cd dist && zip -r ../artifact.zip . && cd -
+  post_build:
+    commands:
+      - echo "Build completed on $(date)"
+artifacts:
+  files:
+    - artifact.zip
+  name: artifact
+  discard-paths: yes

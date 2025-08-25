@@ -3,20 +3,26 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      java: corretto17   # or corretto11 depending on requirement
+      java: corretto11
+    commands:
+      - echo "Installing Maven..."
+      - mvn --version
   pre_build:
     commands:
-      - echo "Cleaning previous build..."
+      - echo "Cleaning previous builds..."
       - mvn clean
   build:
     commands:
-      - echo "Packaging the WAR..."
+      - echo "Building WAR file with Maven..."
       - mvn package -DskipTests
   post_build:
     commands:
-      - echo "Build completed. WAR generated in target/"
+      - echo "Build completed. Preparing artifacts..."
+      - ls -l target/
 
 artifacts:
   files:
     - target/*.war
-  discard-paths: yes
+    - appspec.yml
+    - scripts/**/*
+  discard-paths: no

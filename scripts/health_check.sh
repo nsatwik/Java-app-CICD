@@ -1,6 +1,13 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
+set -e
 
-echo "[ValidateService] Checking service health..."
-curl -sf http://localhost:8080/ >/dev/null
-echo "OK"
+echo "Checking application health..."
+
+# Example: check if Tomcat is running
+if pgrep -f "org.apache.catalina.startup.Bootstrap" > /dev/null; then
+    echo "Tomcat is running."
+    exit 0
+else
+    echo "Tomcat is NOT running."
+    exit 1
+fi

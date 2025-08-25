@@ -6,14 +6,15 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class Application extends SpringBootServletInitializer {
+public class MyAppApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(MyAppApplication.class, args);
     }
 
+    // Required for WAR deployment in external Tomcat
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(Application.class);
+        return builder.sources(MyAppApplication.class);
     }
 }

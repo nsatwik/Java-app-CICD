@@ -2,15 +2,20 @@ version: 0.0
 os: linux
 files:
   - source: target/myapp.war
-    destination: opt/tomcat/webapps/
-  - source: scripts/
-    destination: /opt/myapp/scripts
+    destination: /opt/tomcat/webapps/
+
 permissions:
-  - object: /opt/myapp
+  - object: /opt/tomcat/webapps
+    pattern: "**"
+    owner: tomcat
+    group: tomcat
+    mode: 755
+  - object: scripts/
     pattern: "**"
     owner: ec2-user
     group: ec2-user
     mode: 755
+
 hooks:
   BeforeInstall:
     - location: scripts/install_dependencies.sh

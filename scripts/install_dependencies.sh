@@ -1,15 +1,29 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
+set -e
 
-echo "[BeforeInstall] Installing dependencies and preparing directories..."
+echo "Installing dependencies..."
 
-if command -v yum >/dev/null 2>&1; then
-  sudo yum update -y || true
-  sudo yum install -y java-17-amazon-corretto-headless || true
-elif command -v apt-get >/dev/null 2>&1; then
-  sudo apt-get update -y || true
-  sudo apt-get install -y openjdk-17-jre-headless || true
+# Update packages
+sudo yum update -y
+
+# Install Java 11 if not installed
+if ! java -version &>/dev/null; then
+  sudo amazon-linux-extras enable corretto11
+  sudo yum install -y java-11-amazon-corretto
 fi
 
-sudo mkdir -p /opt/myapp/scripts /var/log/myapp
-sudo chown -R ec2-user:ec2-user /opt/myapp /var/log/myapp
+# Install Tomcat if not installed
+if [ ! -d "/opt/tomcat" ]; then
+  echo "Installing Apache Tomcat..."
+  cd /opt
+  sudo curl -O https://downloads.apache.org/tomcat/tomcat-9/v9.0.92/bin/apache-tomcat-9.0.92.tar.gz
+  sudo tar xvf apache-tomcat-9.0.92.tar.gz
+  sudo mv apache-tomcat-9.0.92 tomcat
+  sudo rm -f apache-tomcat-9.0.92.tar.gz
+fi
+
+# Make sure permissions are correct
+sudo chown -R ec2-user:ec2-user /opt/tomcat
+chmod +x /opt/tomcat/bin/*.sh
+
+echo "Dependencies installed successfully."

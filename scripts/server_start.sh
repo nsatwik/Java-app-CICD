@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
-
-echo "Starting Tomcat server..."
-
-if [ -f /opt/tomcat/bin/startup.sh ]; then
-    sudo /opt/tomcat/bin/startup.sh
+echo "Starting Tomcat..."
+if [ -d "/opt/tomcat" ]; then
+    /opt/tomcat/bin/startup.sh
+    echo "Tomcat started."
+else
+    echo "Tomcat not found!"
+    exit 1
 fi
-
-echo "Tomcat started."

@@ -6,9 +6,11 @@ echo "Installing dependencies..."
 # Update packages
 sudo yum update -y
 
-# Install Java 17 (Corretto)
-amazon-linux-extras enable corretto17
-sudo yum install -y java-17-amazon-corretto
+# Install Java 17 (Corretto) if not installed
+if ! java -version 2>/dev/null | grep "17"; then
+    echo "Installing Java 17 (Amazon Corretto)..."
+    sudo yum install -y java-17-amazon-corretto
+fi
 
 # Install Tomcat 9 if not installed
 if [ ! -d "/opt/tomcat" ]; then

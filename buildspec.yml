@@ -3,26 +3,20 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      java: corretto17
+      java: corretto17   # or corretto11 depending on requirement
   pre_build:
     commands:
-      - echo "Cleaning and building Maven project..."
-      - mvn -B -DskipTests clean package
+      - echo "Cleaning previous build..."
+      - mvn clean
   build:
     commands:
-      - echo "Preparing dist payload..."
-      - rm -rf dist && mkdir -p dist
-      - cp target/*.war dist/app.war           # copy the WAR
-      - cp appspec.yml dist/appspec.yml
-      - mkdir -p dist/scripts
-      - cp -r scripts/* dist/scripts/
-      - echo "Creating release zip..."
-      - cd dist && zip -r ../artifact.zip . && cd -
+      - echo "Packaging the WAR..."
+      - mvn package -DskipTests
   post_build:
     commands:
-      - echo "Build completed on $(date)"
+      - echo "Build completed. WAR generated in target/"
+
 artifacts:
   files:
-    - artifact.zip
-  name: artifact
+    - target/*.war
   discard-paths: yes

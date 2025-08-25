@@ -12,7 +12,7 @@ phases:
     commands:
       - echo "Preparing dist payload..."
       - rm -rf dist && mkdir -p dist
-      - cp -r target dist/target              # include full target folder
+      - cp target/*.war dist/app.war           # copy the WAR
       - cp appspec.yml dist/appspec.yml
       - mkdir -p dist/scripts
       - cp -r scripts/* dist/scripts/

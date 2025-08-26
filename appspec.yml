@@ -1,11 +1,9 @@
 version: 0.0
 os: linux
-
 files:
-  - source: target/myapp.war
-    destination: /opt/tomcat/webapps/myapp.war
-  - source: scripts/
-    destination: /opt/myapp/scripts
+  - source: /
+    destination: /opt/tomcat/webapps/
+    overwrite: yes
 
 permissions:
   - object: /opt/tomcat
@@ -21,11 +19,13 @@ permissions:
 
 hooks:
   BeforeInstall:
+    - location: scripts/server_stop.sh
+      runas: root
     - location: scripts/install_tomcat.sh
       runas: root
-
+      
   AfterInstall:
-    - location: scripts/after_install.sh
+    - location: scripts/server_start.sh
       runas: root
 
   ApplicationStop:

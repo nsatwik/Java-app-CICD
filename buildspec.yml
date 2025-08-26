@@ -5,31 +5,39 @@ phases:
     runtime-versions:
       java: corretto11
     commands:
-      - echo "Installing Maven..."
-      - mvn --version
+      - echo "Installing latest Maven..."
+      - yum remove -y maven
+      - yum install -y wget unzip -y
+      - wget https://archive.apache.org/dist/maven/maven-3/3.9.5/binaries/apache-maven-3.9.5-bin.zip
+      - unzip apache-maven-3.9.5-bin.zip
+      - export M2_HOME=$PWD/apache-maven-3.9.5
+      - export PATH=$M2_HOME/bin:$PATH
+      - mvn -v
+
   pre_build:
     commands:
-      - chmod +x scripts/install_dependencies.sh
-      - echo "Cleaning previous builds..."
+      - echo "Making scripts executable..."
+      - chmod +x scripts/*.sh
+      - echo "Cleaning old builds..."
       - mvn clean
+
   build:
     commands:
-      - echo "Building WAR file with Maven..."
-      - mvn package -DskipTests
+      - echo "Building WAR..."
+      - mvn package
+
   post_build:
     commands:
-    - echo "Preparing deployment artifact..."
-    - mkdir -p deploy
-    - cp target/myapp.war deploy/
-    - cp appspec.yml deploy/
-    - cp -r scripts deploy/
-    - cd deploy
-    - zip -r MyJavaApp.zip *
-    - echo "Artifact ready: MyJavaApp.zip"
+      - echo "Preparing deployment artifact..."
+      - mkdir -p deploy
+      - cp target/myapp.war deploy/
+      - cp appspec.yml deploy/
+      - cp -r scripts deploy/
+      - cd deploy
+      - zip -r MyJavaApp.zip *
+      - echo "Artifact ready: MyJavaApp.zip"
 
 artifacts:
   files:
-    - target/*.war
-    - appspec.yml
-    - scripts/**/*
-  discard-paths: no
+    - deploy/MyJavaApp.zip
+  discard-paths: yes

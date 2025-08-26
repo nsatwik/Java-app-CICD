@@ -21,21 +21,17 @@ permissions:
 
 hooks:
   BeforeInstall:
-    - location: scripts/install_dependencies.sh
-      timeout: 300
+    - location: scripts/install_tomcat.sh
       runas: root
 
   AfterInstall:
     - location: scripts/after_install.sh
-      timeout: 300
       runas: root
 
   ApplicationStop:
     - location: scripts/server_stop.sh
-      timeout: 300
       runas: ec2-user
 
-  ApplicationStart:
+ApplicationStart:
     - location: scripts/server_start.sh
-      timeout: 300
       runas: ec2-user

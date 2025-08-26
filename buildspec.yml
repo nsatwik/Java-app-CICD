@@ -2,21 +2,23 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      java: corretto11
     commands:
-      - echo "Installing Maven..."
-      - yum remove -y maven || true
-      - yum install -y wget unzip
+      - echo "Installing dependencies..."
+      - yum install -y wget unzip tar
+      - echo "Installing Maven 3.9.5..."
       - wget https://archive.apache.org/dist/maven/maven-3/3.9.5/binaries/apache-maven-3.9.5-bin.zip
-      - unzip -q apache-maven-3.9.5-bin.zip
+      - unzip apache-maven-3.9.5-bin.zip
       - export M2_HOME=$PWD/apache-maven-3.9.5
       - export PATH=$M2_HOME/bin:$PATH
       - mvn -v
 
   pre_build:
     commands:
-      - echo "Making scripts executable and cleaning old builds..."
-      - chmod +x scripts/*.sh
+      - echo "Cleaning old builds..."
       - mvn clean
+      - chmod +x scripts/*.sh
 
   build:
     commands:
@@ -27,11 +29,11 @@ phases:
     commands:
       - echo "Preparing deployment artifact..."
       - mkdir -p deploy
-      - cp target/myapp.war deploy/
+      - cp target/*.war deploy/
       - cp appspec.yml deploy/
       - cp -r scripts deploy/
       - cd deploy
-      - zip -r MyJavaApp.zip .
+      - zip -r MyJavaApp.zip *
       - echo "Artifact ready: MyJavaApp.zip"
 
 artifacts:

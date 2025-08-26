@@ -19,8 +19,6 @@ permissions:
 
 hooks:
   BeforeInstall:
-    - location: scripts/server_stop.sh
-      runas: root
     - location: scripts/install_tomcat.sh
       runas: root
       

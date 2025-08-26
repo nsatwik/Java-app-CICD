@@ -1,26 +1,20 @@
 #!/bin/bash
 set -e
 
-echo "Installing dependencies..."
+echo "Installing Maven dependencies..."
 
-# Update packages
-sudo yum update -y
+# install wget and unzip
+yum install -y wget unzip
 
-# Install Java 17 if not installed
-if ! java -version 2>/dev/null | grep "17"; then
-    sudo yum install -y java-17-amazon-corretto
-fi
+# download Maven
+wget https://archive.apache.org/dist/maven/maven-3/3.9.5/binaries/apache-maven-3.9.5-bin.zip
 
-# Install Tomcat 9 if not installed
-if [ ! -d "/opt/tomcat" ]; then
-    cd /opt
-    sudo curl -O https://downloads.apache.org/tomcat/tomcat-9/v9.0.92/bin/apache-tomcat-9.0.92.tar.gz
-    sudo tar xvf apache-tomcat-9.0.92.tar.gz
-    sudo mv apache-tomcat-9.0.92 tomcat
-    sudo rm -f apache-tomcat-9.0.92.tar.gz
-fi
+# unzip instead of tar
+unzip apache-maven-3.9.5-bin.zip -d /opt/
 
-sudo chmod -R 777 /opt/tomcat
-sudo chown -R ec2-user:ec2-user /opt/tomcat
+# set environment variables
+export M2_HOME=/opt/apache-maven-3.9.5
+export PATH=$M2_HOME/bin:$PATH
 
-echo "Dependencies installed successfully."
+# check Maven version
+mvn -v

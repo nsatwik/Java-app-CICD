@@ -18,8 +18,13 @@ phases:
       - mvn package -DskipTests
   post_build:
     commands:
-      - echo "Build completed. Preparing artifacts..."
-      - ls -l target/
+    - echo "Preparing deployment artifact..."
+    - mkdir -p deploy
+    - cp target/app.war deploy/
+    - cp appspec.yml deploy/
+    - cp -r scripts deploy/
+    - cd deploy
+    - zip -r MyJavaApp.zip *
 
 artifacts:
   files:

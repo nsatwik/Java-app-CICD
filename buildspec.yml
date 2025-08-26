@@ -34,7 +34,6 @@ phases:
       - cp -r scripts deploy/
       - cd deploy
       - zip -r MyJavaApp.zip *
-      - echo "Artifact ready: MyJavaApp.zip"
 
 artifacts:
   files:

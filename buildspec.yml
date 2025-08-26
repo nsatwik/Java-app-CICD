@@ -9,6 +9,7 @@ phases:
       - mvn --version
   pre_build:
     commands:
+      - chmod +x scripts/install_dependencies.sh
       - echo "Cleaning previous builds..."
       - mvn clean
   build:

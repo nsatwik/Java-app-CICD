@@ -1,5 +1,4 @@
 version: 0.2
-
 phases:
   install:
     runtime-versions:
@@ -35,7 +34,7 @@ phases:
       - cp appspec.yml deploy/
       - cp -r scripts deploy/
       - cd deploy
-      - zip -r MyJavaApp.zip *
+      - zip -r MyJavaApp.zip .
       - echo "Artifact ready: MyJavaApp.zip"
 
 artifacts:

@@ -2,10 +2,8 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      java: corretto11
     commands:
-      - echo "Installing required tools..."
+      - echo "Installing Maven..."
       - yum remove -y maven || true
       - yum install -y wget unzip
       - wget https://archive.apache.org/dist/maven/maven-3/3.9.5/binaries/apache-maven-3.9.5-bin.zip
@@ -27,8 +25,6 @@ phases:
 
   post_build:
     commands:
-      - echo "Setting executable permissions on scripts..."
-      - chmod +x scripts/*.sh
       - echo "Preparing deployment artifact..."
       - mkdir -p deploy
       - cp target/myapp.war deploy/

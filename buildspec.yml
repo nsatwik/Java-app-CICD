@@ -1,4 +1,5 @@
 version: 0.2
+
 phases:
   install:
     runtime-versions:
@@ -15,8 +16,8 @@ phases:
 
   pre_build:
     commands:
-      - echo "Cleaning old builds..."
-      - chmod +x scripts/install_dependencies.sh
+      - echo "Making scripts executable and cleaning old builds..."
+      - chmod +x scripts/*.sh
       - mvn clean
 
   build:
